@@ -3,8 +3,9 @@ import './todo-item.css';
 import classNames from 'classnames';
 import { DeleteTwoTone } from '@ant-design/icons';
 import { Tag } from 'antd';
+import { IPropsTodoItem } from '../../modal/todo-list';
 
-export const TodoItem = (props: any) => {
+export const TodoItem = (props: IPropsTodoItem) => {
     return (
         <div className="todo-item">
             <div className="d-flex item-left"> 

@@ -5,40 +5,47 @@ import "antd/dist/antd.css";
 import "./todo-list.css";
 import Search from "antd/lib/input/Search";
 import { TodoItem } from "./todo-item";
+import { ITodoList } from "../../modal/todo-list";
 
 export const TodoList = () => {
     const todoItems = [
         {
+            id: 1,
             title: 'Angularty',
             isActive: true,
             type: "Work",
             datetime: "2021-01-05T15:27:08"
         },
         {
+            id: 2,
             title: 'ReactJs',
             isActive: false,
             type: "Training",
             datetime: "2021-01-05T15:27:08"
         },
         {
+            id: 3,
             title: 'React Native',
             isActive: true,
             type: "Outside",
             datetime: "2021-01-05T15:27:08"
         },
         {
+            id: 4,
             title: 'HTML',
             isActive: true,
             type: "Work",
             datetime: "2021-01-05T15:27:08"
         },
         {
+            id: 5,
             title: 'NCC Soft',
             isActive: true,
             type: "Training",
             datetime: "2021-01-05T15:27:08"
         },
         {
+            id: 6,
             title: 'VueJS',
             isActive: true,
             type: "Outside",
@@ -47,13 +54,21 @@ export const TodoList = () => {
     ]
 
     // const [isLoaded, setIsLoaded] = useState(false);
-    const [listTodo, setListUser] = useState(todoItems);
+    const [listTodo, setListUser] = useState<ITodoList[]>(todoItems);
     const [checkAllActive, setcheckAllActive] = useState(false);
     const [listTodoFilter, setListTodoFilter] = useState(listTodo);
+    const [valueTodoFilter, setValueTodoFilter] = useState(0);
     
     useEffect(() => { 
         setListTodoFilter(listTodo);
+        filterItem();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [listTodo]);
+
+    useEffect(() => { 
+        filterItem();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [valueTodoFilter]);
 
     const allActiveItem = () => {
         listTodo.forEach(e => {
@@ -62,7 +77,7 @@ export const TodoList = () => {
         setcheckAllActive(!checkAllActive);
     }
 
-    const checkBoxActive = (item:any) => {
+    const checkBoxActive = (item:ITodoList) => {
         let isActive = item.isActive;
         let index = listTodo.indexOf(item);
         setListUser(
@@ -78,7 +93,7 @@ export const TodoList = () => {
 
     const onSearch = () => { };
 
-    const delItem = (item:any) => {
+    const delItem = (item:ITodoList) => {
         let index = listTodo.indexOf(item);
         setListUser(
             [...listTodo.slice(0, index),
@@ -86,8 +101,8 @@ export const TodoList = () => {
         );
     };
 
-    const filterItem = (value:any) => {
-        let list = (value===1) ? listTodo : listTodo.filter(e => e.isActive === value);
+    const filterItem = () => {
+        let list = (valueTodoFilter===0) ? listTodo : (valueTodoFilter===1) ? listTodo.filter(e => e.isActive === true) : listTodo.filter(e => e.isActive === false);
         setListTodoFilter(list);
     }
 
@@ -112,9 +127,9 @@ export const TodoList = () => {
                     footer={
                         <div className="list-footer">
                             <div className="total-active">{listTodoFilter.filter(e => e.isActive === true).length} items left</div>
-                            <Button onClick={() => filterItem(1)} type="primary">All</Button>
-                            <Button onClick={() => filterItem(true)} type="primary">Active</Button>
-                            <Button onClick={() => filterItem(false)} type="primary">Completed</Button>
+                            <Button onClick={() => setValueTodoFilter(0)} type="primary">All</Button>
+                            <Button onClick={() => setValueTodoFilter(1)} type="primary">Active</Button>
+                            <Button onClick={() => setValueTodoFilter(2)} type="primary">Completed</Button>
                         </div>
                     }
                     bordered
