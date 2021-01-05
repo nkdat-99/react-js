@@ -1,11 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './todo-item.css';
 import classNames from 'classnames';
-import { DeleteTwoTone } from '@ant-design/icons';
-import { Tag } from 'antd';
+import { DeleteTwoTone, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Modal, Tag } from 'antd';
 import { IPropsTodoItem } from '../../modal/todo-list';
 
 export const TodoItem = (props: IPropsTodoItem) => {
+    const { confirm } = Modal;
+    
+    const [isDeadLine, setIsDeadLine] = useState(false);
+    
+    useEffect(() => {
+        onDeadline();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.item])
+
+    const onDeadline = () => {
+        let dateline = new Date(props.item.datetime);
+        var dateNow = new Date();
+        let timeSecond = (dateline.getTime() - dateNow.getTime());
+        if (timeSecond < 60*15*1000) 
+            setIsDeadLine(true);
+        else {
+            setIsDeadLine(false);
+            setTimeout(() => { 
+                setIsDeadLine(true); 
+            }, timeSecond - 60*15*1000);
+        }
+    }
+
+    const showConfirm = () => {
+        confirm({
+          title: 'Delete Item',
+          icon: <ExclamationCircleOutlined />,
+          content: 'Do you want to delete these items?',
+          onOk() {
+            props.delItem();
+          },
+          onCancel() {},
+        });
+      }
     
     const convert = (time: string) => {
         let date = new Date(time);
@@ -27,8 +61,9 @@ export const TodoItem = (props: IPropsTodoItem) => {
                 <Tag className="item-type" color="#2db7f5">{props.item.type}</Tag>     
             </div>
             <div className="d-flex item-right">
+                { isDeadLine ? <Tag className="deadline" color="#f50">Deadline</Tag> : ""}
                 <Tag className="item-datetime" color="#f50">{timeFormat}</Tag>    
-                <DeleteTwoTone className="icon-del" twoToneColor="#ff0000" onClick={props.delItem}/>
+                <DeleteTwoTone className="icon-del" twoToneColor="#ff0000" onClick={showConfirm}/>
             </div> 
         </div>
     )

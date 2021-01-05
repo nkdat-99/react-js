@@ -9,7 +9,7 @@ export interface ITodoList {
 export interface IPropsTodoItem {
     item: ITodoList,
     isActiveItem: (event:any) => void,
-    delItem: (event:any) => void,
+    delItem: Function,
 }
 
 export interface IPropsCreateEditItem {

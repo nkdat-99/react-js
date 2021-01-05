@@ -56,10 +56,10 @@ export const TodoList = () => {
 
     // const [isLoaded, setIsLoaded] = useState(false);
     const [listTodo, setListUser] = useState<ITodoList[]>(todoItems);
-    const [checkAllActive, setcheckAllActive] = useState(false);
-    const [listTodoFilter, setListTodoFilter] = useState(listTodo);
-    const [valueTodoFilter, setValueTodoFilter] = useState(0);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [checkAllActive, setcheckAllActive] = useState<boolean>(false);
+    const [listTodoFilter, setListTodoFilter] = useState<ITodoList[]>(listTodo);
+    const [valueTodoFilter, setValueTodoFilter] = useState<number>(0);
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     
     useEffect(() => { 
         setListTodoFilter(listTodo);
@@ -76,6 +76,7 @@ export const TodoList = () => {
         listTodo.forEach(e => {
             e.isActive = checkAllActive;
         })
+        filterItem();
         setcheckAllActive(!checkAllActive);
     }
 
