@@ -51,7 +51,9 @@ export const TodoList = () => {
     const [checkAllActive, setcheckAllActive] = useState(false);
     const [listTodoFilter, setListTodoFilter] = useState(listTodo);
     
-    useEffect(() => { }, []);
+    useEffect(() => { 
+        setListTodoFilter(listTodo);
+    }, [listTodo]);
 
     const allActiveItem = () => {
         listTodo.forEach(e => {
@@ -111,8 +113,8 @@ export const TodoList = () => {
                         <div className="list-footer">
                             <div className="total-active">{listTodoFilter.filter(e => e.isActive === true).length} items left</div>
                             <Button onClick={() => filterItem(1)} type="primary">All</Button>
-                            <Button onClick={() => filterItem(false)} type="primary">Active</Button>
-                            <Button onClick={() => filterItem(true)} type="primary">Completed</Button>
+                            <Button onClick={() => filterItem(true)} type="primary">Active</Button>
+                            <Button onClick={() => filterItem(false)} type="primary">Completed</Button>
                         </div>
                     }
                     bordered
