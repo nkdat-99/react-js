@@ -6,50 +6,51 @@ import "./todo-list.css";
 import Search from "antd/lib/input/Search";
 import { TodoItem } from "./todo-item";
 import { ITodoList } from "../../modal/todo-list";
+import { CreateEditTodoItem } from "./CreateEditTodoItem/create-edit-todo-item";
 
 export const TodoList = () => {
     const todoItems = [
         {
-            id: 1,
+            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
             title: 'Angularty',
             isActive: true,
             type: "Work",
-            datetime: "2021-01-05T15:27:08"
+            datetime: "Tue Jan 05 2021 08:19:29 GMT+0700 (Giờ Đông Dương)"
         },
         {
-            id: 2,
+            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
             title: 'ReactJs',
             isActive: false,
             type: "Training",
-            datetime: "2021-01-05T15:27:08"
+            datetime: "Tue Jan 05 2021 21:19:29 GMT+0700 (Giờ Đông Dương)"
         },
         {
-            id: 3,
+            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
             title: 'React Native',
             isActive: true,
             type: "Outside",
-            datetime: "2021-01-05T15:27:08"
+            datetime: "Tue Jan 10 2021 03:20:29 GMT+0700 (Giờ Đông Dương)"
         },
         {
-            id: 4,
+            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
             title: 'HTML',
             isActive: true,
             type: "Work",
-            datetime: "2021-01-05T15:27:08"
+            datetime: "Tue Jan 05 2021 7:19:29 GMT+0700 (Giờ Đông Dương)"
         },
         {
-            id: 5,
+            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
             title: 'NCC Soft',
             isActive: true,
             type: "Training",
-            datetime: "2021-01-05T15:27:08"
+            datetime: "Tue Jan 08 2021 05:38:29 GMT+0700 (Giờ Đông Dương)"
         },
         {
-            id: 6,
+            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
             title: 'VueJS',
             isActive: true,
             type: "Outside",
-            datetime: "2021-01-05T15:27:08"
+            datetime: "Tue Jan 05 2021 15:19:29 GMT+0700 (Giờ Đông Dương)"
         },
     ]
 
@@ -58,6 +59,7 @@ export const TodoList = () => {
     const [checkAllActive, setcheckAllActive] = useState(false);
     const [listTodoFilter, setListTodoFilter] = useState(listTodo);
     const [valueTodoFilter, setValueTodoFilter] = useState(0);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     
     useEffect(() => { 
         setListTodoFilter(listTodo);
@@ -87,13 +89,9 @@ export const TodoList = () => {
         );
     };
 
-    const test = () => {
-        console.log(123);
-    };
-
     const onSearch = () => { };
 
-    const delItem = (item:ITodoList) => {
+    const delItem = (item: ITodoList) => {
         let index = listTodo.indexOf(item);
         setListUser(
             [...listTodo.slice(0, index),
@@ -101,9 +99,18 @@ export const TodoList = () => {
         );
     };
 
+    const addItem = (item: ITodoList) => {
+        listTodo.push(item);
+        setListUser(listTodo);
+    }
+
     const filterItem = () => {
         let list = (valueTodoFilter===0) ? listTodo : (valueTodoFilter===1) ? listTodo.filter(e => e.isActive === true) : listTodo.filter(e => e.isActive === false);
         setListTodoFilter(list);
+    }
+
+    const openModalTodoItem = (value: boolean) => {
+        setIsModalVisible(value);
     }
 
     return (
@@ -118,10 +125,10 @@ export const TodoList = () => {
                     header={
                         <div className="list-header">
                             <Button onClick={() => allActiveItem()} type="primary">
-                                <div className="check-all" onClick={() => test()}></div>
+                                <div className="check-all"></div>
                             </Button>
-                            <Search placeholder="Search text" onSearch={onSearch} enterButton style={{ width: 340 }} />
-                            <Button onClick={() => test()} type="primary">Thêm Mới</Button>
+                            <Search placeholder="Search text" onSearch={onSearch} enterButton style={{ width: 440 }} />
+                            <Button onClick={() => openModalTodoItem(true)} type="primary">New Item</Button>
                         </div>
                     }
                     footer={
@@ -141,6 +148,7 @@ export const TodoList = () => {
                     )}
                 />
             </div>
+            <CreateEditTodoItem isModalVisible={isModalVisible} addItem={addItem} openModalTodoItem={() => openModalTodoItem(false)}></CreateEditTodoItem>
         </div>
     );
 };
