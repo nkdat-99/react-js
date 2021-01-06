@@ -8,7 +8,7 @@ export interface ITodoList {
 
 export interface IPropsTodoItem {
     item: ITodoList,
-    isActiveItem: (event:any) => void,
+    isActiveItem: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
     delItem: Function,
 }
 

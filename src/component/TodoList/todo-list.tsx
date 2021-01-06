@@ -1,67 +1,23 @@
 import React, { useEffect, useState } from "react";
-// import axios from 'axios';
 import { List, Divider, Button } from "antd";
 import "antd/dist/antd.css";
 import "./todo-list.css";
 import Search from "antd/lib/input/Search";
 import { TodoItem } from "./todo-item";
-import { ITodoList } from "../../modal/todo-list";
+import { ITodoList } from "../../modal/iTodoList";
 import { CreateEditTodoItem } from "./CreateEditTodoItem/create-edit-todo-item";
+import { deleteTodo, getAll, getAllActive, postItem, putItemActive } from "../../service/api";
 
 export const TodoList = () => {
-    const todoItems = [
-        {
-            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
-            title: 'Angularty',
-            isActive: true,
-            type: "Work",
-            datetime: "Tue Jan 05 2021 08:19:29 GMT+0700 (Giờ Đông Dương)"
-        },
-        {
-            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
-            title: 'ReactJs',
-            isActive: false,
-            type: "Training",
-            datetime: "Tue Jan 05 2021 21:19:29 GMT+0700 (Giờ Đông Dương)"
-        },
-        {
-            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
-            title: 'React Native',
-            isActive: true,
-            type: "Outside",
-            datetime: "Tue Jan 10 2021 03:20:29 GMT+0700 (Giờ Đông Dương)"
-        },
-        {
-            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
-            title: 'HTML',
-            isActive: true,
-            type: "Work",
-            datetime: "Tue Jan 05 2021 7:19:29 GMT+0700 (Giờ Đông Dương)"
-        },
-        {
-            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
-            title: 'NCC Soft',
-            isActive: true,
-            type: "Training",
-            datetime: "Tue Jan 08 2021 05:38:29 GMT+0700 (Giờ Đông Dương)"
-        },
-        {
-            id: "b77d409a-10cd-4a47-8e94-b0cd0ab50aa1",
-            title: 'VueJS',
-            isActive: true,
-            type: "Outside",
-            datetime: "Tue Jan 05 2021 15:19:29 GMT+0700 (Giờ Đông Dương)"
-        },
-    ]
-
-    // const [isLoaded, setIsLoaded] = useState(false);
-    const [listTodo, setListUser] = useState<ITodoList[]>(todoItems);
-    const [checkAllActive, setcheckAllActive] = useState<boolean>(false);
+    const [listTodo, setListTodo] = useState<ITodoList[]>([]);
     const [listTodoFilter, setListTodoFilter] = useState<ITodoList[]>(listTodo);
     const [valueTodoFilter, setValueTodoFilter] = useState<number>(0);
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     
     useEffect(() => { 
+        getAll().then(e => {
+            setListTodo(e.data)
+        });
         setListTodoFilter(listTodo);
         filterItem();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,36 +29,22 @@ export const TodoList = () => {
     }, [valueTodoFilter]);
 
     const allActiveItem = () => {
-        listTodo.forEach(e => {
-            e.isActive = checkAllActive;
-        })
-        filterItem();
-        setcheckAllActive(!checkAllActive);
+        getAllActive().then(e => {})
     }
 
     const checkBoxActive = (item:ITodoList) => {
-        let isActive = item.isActive;
-        let index = listTodo.indexOf(item);
-        setListUser(
-            [...listTodo.slice(0, index),
-            {...item, isActive: !isActive }, 
-            ...listTodo.slice(index + 1)]
-        );
+        putItemActive(item).then(e => {});
     };
 
     const onSearch = () => { };
 
     const delItem = (item: ITodoList) => {
-        let index = listTodo.indexOf(item);
-        setListUser(
-            [...listTodo.slice(0, index),
-            ...listTodo.slice(index + 1)]
-        );
+        deleteTodo(item.id).then(e => {});
     };
 
     const addItem = (item: ITodoList) => {
-        listTodo.push(item);
-        setListUser(listTodo);
+        postItem(item).then(e => {});
+        setListTodo(listTodo);
     }
 
     const filterItem = () => {

@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Button, DatePicker, Form, Input, Modal, Select } from 'antd'
 import './create-edit-todo-item.css'
-import { IPropsCreateEditItem } from '../../../modal/todo-list';
+import { IPropsCreateEditItem } from '../../../modal/iTodoList';
 import { Guid } from 'guid-typescript';
 
 export const CreateEditTodoItem = (props: IPropsCreateEditItem) => {
     const [form] = Form.useForm();
     const { Option } = Select;
-
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         setIsModalVisible(props.isModalVisible)
     }, [props.isModalVisible])
-  
-    const handleCancel = () => {
+
+    const handleCancel:Function = () => {
         setIsModalVisible(false);
         props.openModalTodoItem();
         resetForm();
@@ -25,17 +24,17 @@ export const CreateEditTodoItem = (props: IPropsCreateEditItem) => {
         wrapperCol: { span: 16 },
     };
       
-    const onFinish = (values: any) => {
+    const onFinish = (values: INewTodoList) => {
         values.id = String(Guid.create());
         values.isActive = (values.isActive==='0') ? true : false;
-        values.datetime = String(values.datetime._d);
+        values.datetime = String(values.datetime);
         setIsModalVisible(false);
         props.addItem(values);
         props.openModalTodoItem();
         resetForm();
     };
 
-    const resetForm = () => {
+    const resetForm:Function = () => {
         form.resetFields();
     }
 
@@ -102,4 +101,12 @@ export const CreateEditTodoItem = (props: IPropsCreateEditItem) => {
             </Modal>
         </div>
     )
+}
+
+export interface INewTodoList {
+    id: string,
+    title: string,
+    isActive: any, //isActive thay đổi type nên em chưa làm enum
+    type: string,
+    datetime: string
 }
